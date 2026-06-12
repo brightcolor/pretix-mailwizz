@@ -1,0 +1,5 @@
+include LICENSE
+include README.md
+include CHANGELOG.md
+recursive-include pretix_mailwizz/templates *
+recursive-include pretix_mailwizz/locale *

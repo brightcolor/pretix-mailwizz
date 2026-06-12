@@ -1,0 +1,125 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n bootstrap3 %}
+
+{% block title %}{% trans "MailWizz Newsletter" %} – {{ event.name }}{% endblock %}
+
+{% block inside %}
+<div class="page-header">
+  <h1>{% trans "MailWizz Newsletter" %}</h1>
+</div>
+
+<p class="text-muted">
+  {% blocktrans trimmed %}
+    Adds an optional newsletter opt-in checkbox to the checkout. If the
+    customer actively consents, the email address is subscribed to the
+    configured MailWizz list after the order is placed. Make sure double
+    opt-in is enabled for the list in MailWizz. Settings left empty here
+    fall back to the organizer-level settings.
+  {% endblocktrans %}
+</p>
+
+{% if not configured %}
+<div class="alert alert-warning">
+  {% blocktrans trimmed %}
+    MailWizz is not fully configured yet (API URL, API key and list UID are
+    required). The checkbox will not be shown in the checkout until the
+    configuration is complete.
+  {% endblocktrans %}
+</div>
+{% endif %}
+
+<form action="" method="post" class="form-horizontal">
+  {% csrf_token %}
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{% trans "General" %}</h3></div>
+    <div class="panel-body">
+      {% bootstrap_form_errors form %}
+      {% bootstrap_field form.mailwizz_enabled layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_show_checkbox layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_checkbox_label layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_checkbox_help layout="horizontal" %}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{% trans "MailWizz connection" %}</h3></div>
+    <div class="panel-body">
+      {% bootstrap_field form.mailwizz_api_url layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_api_key layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_list_uid layout="horizontal" %}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{% trans "Custom field mapping" %}</h3></div>
+    <div class="panel-body">
+      {% bootstrap_field form.mailwizz_field_fname layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_field_lname layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_field_event layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_field_ordercode layout="horizontal" %}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{% trans "Advanced" %}</h3></div>
+    <div class="panel-body">
+      {% bootstrap_field form.mailwizz_timeout layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_max_retries layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_reactivate_unsubscribed layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_debug_logging layout="horizontal" %}
+    </div>
+  </div>
+
+  <div class="form-group submit-group">
+    <button type="submit" class="btn btn-primary btn-save">{% trans "Save" %}</button>
+  </div>
+</form>
+
+<form action="{% url "plugins:pretix_mailwizz:event.test" organizer=request.organizer.slug event=request.event.slug %}" method="post" class="form-inline" style="margin-bottom: 20px;">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-default">
+    <span class="fa fa-plug"></span> {% trans "Test connection" %}
+  </button>
+  <span class="help-block">{% trans "Uses the saved settings to fetch the configured list from MailWizz." %}</span>
+</form>
+
+<div class="panel panel-default">
+  <div class="panel-heading"><h3 class="panel-title">{% trans "Recent newsletter syncs" %}</h3></div>
+  <div class="panel-body">
+    {% if sync_logs %}
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>{% trans "Order" %}</th>
+          <th>{% trans "Email" %}</th>
+          <th>{% trans "Status" %}</th>
+          <th>{% trans "Attempts" %}</th>
+          <th>{% trans "Last attempt" %}</th>
+          <th>{% trans "Note" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in sync_logs %}
+        <tr>
+          <td>{{ entry.order_code }}</td>
+          <td>{{ entry.email_masked }}</td>
+          <td>
+            {% if entry.status_raw == "success" %}<span class="label label-success">{{ entry.status }}</span>
+            {% elif entry.status_raw == "failed" %}<span class="label label-danger">{{ entry.status }}</span>
+            {% elif entry.status_raw == "skipped" %}<span class="label label-default">{{ entry.status }}</span>
+            {% else %}<span class="label label-warning">{{ entry.status }}</span>{% endif %}
+          </td>
+          <td>{{ entry.attempts }}</td>
+          <td>{{ entry.last_attempt|default:"–" }}</td>
+          <td>{{ entry.error_message }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-muted">{% trans "No newsletter syncs yet." %}</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

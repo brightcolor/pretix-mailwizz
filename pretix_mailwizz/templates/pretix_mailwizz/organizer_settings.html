@@ -1,0 +1,65 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n bootstrap3 %}
+
+{% block title %}{% trans "MailWizz Newsletter" %} – {{ organizer.name }}{% endblock %}
+
+{% block inside %}
+<div class="page-header">
+  <h1>{% trans "MailWizz Newsletter" %}</h1>
+</div>
+
+<p class="text-muted">
+  {% blocktrans trimmed %}
+    Organizer-wide default settings for the MailWizz newsletter integration.
+    Events use these values unless they define their own.
+  {% endblocktrans %}
+</p>
+
+<form action="" method="post" class="form-horizontal">
+  {% csrf_token %}
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{% trans "General" %}</h3></div>
+    <div class="panel-body">
+      {% bootstrap_form_errors form %}
+      {% bootstrap_field form.mailwizz_enabled layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_show_checkbox layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_checkbox_label layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_checkbox_help layout="horizontal" %}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{% trans "MailWizz connection" %}</h3></div>
+    <div class="panel-body">
+      {% bootstrap_field form.mailwizz_api_url layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_api_key layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_list_uid layout="horizontal" %}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{% trans "Custom field mapping" %}</h3></div>
+    <div class="panel-body">
+      {% bootstrap_field form.mailwizz_field_fname layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_field_lname layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_field_event layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_field_ordercode layout="horizontal" %}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{% trans "Advanced" %}</h3></div>
+    <div class="panel-body">
+      {% bootstrap_field form.mailwizz_timeout layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_max_retries layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_reactivate_unsubscribed layout="horizontal" %}
+      {% bootstrap_field form.mailwizz_debug_logging layout="horizontal" %}
+    </div>
+  </div>
+
+  <div class="form-group submit-group">
+    <button type="submit" class="btn btn-primary btn-save">{% trans "Save" %}</button>
+  </div>
+</form>
+{% endblock %}

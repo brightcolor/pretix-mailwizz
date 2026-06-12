@@ -1,0 +1,214 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: pretix-mailwizz 1.0.0\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "MailWizz Newsletter"
+msgstr "MailWizz Newsletter"
+
+msgid ""
+"Adds an optional newsletter opt-in checkbox to the checkout. If the "
+"customer actively consents, the email address is subscribed to a "
+"configurable MailWizz list after the order is placed, triggering MailWizz's "
+"double opt-in process."
+msgstr ""
+"Fügt dem Checkout eine optionale Newsletter-Checkbox hinzu. Nur wenn die "
+"Kundin oder der Kunde aktiv zustimmt, wird die E-Mail-Adresse nach "
+"Abschluss der Bestellung in eine konfigurierbare MailWizz-Liste eingetragen "
+"und damit der Double-Opt-In-Prozess von MailWizz gestartet."
+
+msgid "Enable MailWizz newsletter integration"
+msgstr "MailWizz-Newsletter-Integration aktivieren"
+
+msgid "Show newsletter checkbox in checkout"
+msgstr "Newsletter-Checkbox im Checkout anzeigen"
+
+msgid "Consent text (checkbox label)"
+msgstr "Einwilligungstext (Checkbox-Beschriftung)"
+
+msgid ""
+"Shown next to the checkbox. The exact text active at the time of the order "
+"is stored with the sync record for accountability. Leave empty for the "
+"built-in default."
+msgstr ""
+"Wird neben der Checkbox angezeigt. Der zum Bestellzeitpunkt aktive Text "
+"wird zur Nachweisbarkeit mit dem Sync-Eintrag gespeichert. Leer lassen für "
+"den eingebauten Standardtext."
+
+msgid "Additional help text below the checkbox (optional)"
+msgstr "Zusätzlicher Hilfetext unter der Checkbox (optional)"
+
+msgid "MailWizz API base URL"
+msgstr "MailWizz-API-Basis-URL"
+
+msgid "e.g. https://newsletter.example.org/api"
+msgstr "z. B. https://newsletter.example.org/api"
+
+msgid "MailWizz API key"
+msgstr "MailWizz-API-Schlüssel"
+
+msgid "Stored value is never displayed again after saving."
+msgstr "Der gespeicherte Wert wird nach dem Speichern nie wieder angezeigt."
+
+msgid "MailWizz list UID"
+msgstr "MailWizz-Listen-UID"
+
+msgid ""
+"The list must have double opt-in enabled in MailWizz; the plugin never "
+"bypasses the confirmation email."
+msgstr ""
+"Für die Liste muss in MailWizz Double-Opt-In aktiviert sein; das Plugin "
+"umgeht die Bestätigungs-E-Mail niemals."
+
+msgid "Field tag for first name"
+msgstr "Feld-Tag für den Vornamen"
+
+msgid "Leave empty to not transmit the first name."
+msgstr "Leer lassen, um den Vornamen nicht zu übertragen."
+
+msgid "Field tag for last name"
+msgstr "Feld-Tag für den Nachnamen"
+
+msgid "Leave empty to not transmit the last name."
+msgstr "Leer lassen, um den Nachnamen nicht zu übertragen."
+
+msgid "Field tag for event name (optional)"
+msgstr "Feld-Tag für den Eventnamen (optional)"
+
+msgid "Field tag for pretix order code (optional)"
+msgstr "Feld-Tag für den pretix-Bestellcode (optional)"
+
+msgid "API timeout (seconds)"
+msgstr "API-Timeout (Sekunden)"
+
+msgid "Retries on temporary errors"
+msgstr "Wiederholungsversuche bei temporären Fehlern"
+
+msgid "Re-subscribe contacts that have unsubscribed"
+msgstr "Abgemeldete Kontakte erneut anmelden"
+
+msgid ""
+"Not recommended. By default, contacts who unsubscribed in MailWizz are "
+"never re-added by this plugin."
+msgstr ""
+"Nicht empfohlen. Standardmäßig werden Kontakte, die sich in MailWizz "
+"abgemeldet haben, von diesem Plugin niemals erneut eingetragen."
+
+msgid "Enable debug logging"
+msgstr "Debug-Logging aktivieren"
+
+msgid ""
+"Logs API calls (method, path, status code). Email addresses are masked; "
+"the API key and response bodies are never logged."
+msgstr ""
+"Protokolliert API-Aufrufe (Methode, Pfad, Statuscode). E-Mail-Adressen "
+"werden maskiert; API-Schlüssel und Antwortinhalte werden niemals "
+"protokolliert."
+
+msgid "MailWizz settings have been saved."
+msgstr "Die MailWizz-Einstellungen wurden gespeichert."
+
+msgid "Please correct the errors below."
+msgstr "Bitte korrigieren Sie die unten angezeigten Fehler."
+
+msgid "Please save API URL, API key and list UID first."
+msgstr "Bitte speichern Sie zuerst API-URL, API-Schlüssel und Listen-UID."
+
+msgid "Connection successful. %(detail)s"
+msgstr "Verbindung erfolgreich. %(detail)s"
+
+msgid "Connection failed: %(detail)s"
+msgstr "Verbindung fehlgeschlagen: %(detail)s"
+
+msgid "General"
+msgstr "Allgemein"
+
+msgid "MailWizz connection"
+msgstr "MailWizz-Verbindung"
+
+msgid "Custom field mapping"
+msgstr "Zuordnung benutzerdefinierter Felder"
+
+msgid "Advanced"
+msgstr "Erweitert"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Test connection"
+msgstr "Verbindung testen"
+
+msgid "Uses the saved settings to fetch the configured list from MailWizz."
+msgstr ""
+"Ruft mit den gespeicherten Einstellungen die konfigurierte Liste von "
+"MailWizz ab."
+
+msgid "Recent newsletter syncs"
+msgstr "Letzte Newsletter-Synchronisierungen"
+
+msgid "Order"
+msgstr "Bestellung"
+
+msgid "Email"
+msgstr "E-Mail"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Attempts"
+msgstr "Versuche"
+
+msgid "Last attempt"
+msgstr "Letzter Versuch"
+
+msgid "Note"
+msgstr "Hinweis"
+
+msgid "No newsletter syncs yet."
+msgstr "Noch keine Newsletter-Synchronisierungen."
+
+msgid ""
+"Adds an optional newsletter opt-in checkbox to the checkout. If the "
+"customer actively consents, the email address is subscribed to the "
+"configured MailWizz list after the order is placed. Make sure double opt-in "
+"is enabled for the list in MailWizz. Settings left empty here fall back to "
+"the organizer-level settings."
+msgstr ""
+"Fügt dem Checkout eine optionale Newsletter-Checkbox hinzu. Nur bei aktiver "
+"Zustimmung wird die E-Mail-Adresse nach Abschluss der Bestellung in die "
+"konfigurierte MailWizz-Liste eingetragen. Stellen Sie sicher, dass für die "
+"Liste in MailWizz Double-Opt-In aktiviert ist. Hier leer gelassene "
+"Einstellungen übernehmen die Werte der Veranstalter-Ebene."
+
+msgid ""
+"MailWizz is not fully configured yet (API URL, API key and list UID are "
+"required). The checkbox will not be shown in the checkout until the "
+"configuration is complete."
+msgstr ""
+"MailWizz ist noch nicht vollständig konfiguriert (API-URL, API-Schlüssel "
+"und Listen-UID sind erforderlich). Die Checkbox wird erst im Checkout "
+"angezeigt, wenn die Konfiguration vollständig ist."
+
+msgid ""
+"Organizer-wide default settings for the MailWizz newsletter integration. "
+"Events use these values unless they define their own."
+msgstr ""
+"Veranstalterweite Standardeinstellungen für die MailWizz-Newsletter-"
+"Integration. Events verwenden diese Werte, sofern sie keine eigenen "
+"definieren."
+
+msgid "pending"
+msgstr "ausstehend"
+
+msgid "success"
+msgstr "erfolgreich"
+
+msgid "failed"
+msgstr "fehlgeschlagen"
+
+msgid "skipped"
+msgstr "übersprungen"
