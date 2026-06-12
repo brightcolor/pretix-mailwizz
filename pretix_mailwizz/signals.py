@@ -164,6 +164,10 @@ def nav_organizer_mailwizz(sender, request=None, organizer=None, **kwargs):
 
 @receiver(nav_event_settings, dispatch_uid="pretix_mailwizz_nav_event_settings")
 def nav_event_settings_mailwizz(sender, request=None, **kwargs):
+    if not request.user.has_event_permission(
+        request.organizer, request.event, "can_change_event_settings", request=request
+    ):
+        return []
     url = reverse(
         "plugins:pretix_mailwizz:event.settings",
         kwargs={"organizer": request.organizer.slug, "event": request.event.slug},
