@@ -53,11 +53,11 @@ Celery-Worker neu starten.
 > pip install git+https://github.com/brightcolor/pretix-mailwizz.git
 >
 > # Bestimmten Release-Tag (stabiler):
-> pip install git+https://github.com/brightcolor/pretix-mailwizz.git@v1.0.0
+> pip install git+https://github.com/brightcolor/pretix-mailwizz.git@v1.1.0
 >
 > # Oder aus dem Quellverzeichnis / Wheel:
 > pip install /pfad/zu/pretix-mailwizz
-> pip install pretix_mailwizz-1.0.0-py3-none-any.whl
+> pip install pretix_mailwizz-1.1.0-py3-none-any.whl
 > ```
 
 ### Variante A: Manuelle Installation (pretix small-scale, virtualenv)
@@ -71,10 +71,10 @@ Bei einer Installation nach der offiziellen Anleitung
 
 #    Direkt aus GitHub (empfohlen):
 sudo -u pretix /var/pretix/venv/bin/pip install \
-  git+https://github.com/brightcolor/pretix-mailwizz.git@v1.0.0
+  git+https://github.com/brightcolor/pretix-mailwizz.git@v1.1.0
 
 #    Oder aus einem lokal kopierten Wheel:
-sudo -u pretix /var/pretix/venv/bin/pip install /tmp/pretix_mailwizz-1.0.0-py3-none-any.whl
+sudo -u pretix /var/pretix/venv/bin/pip install /tmp/pretix_mailwizz-1.1.0-py3-none-any.whl
 
 #    Oder aus dem Quellverzeichnis (z. B. per Git ausgecheckt):
 sudo -u pretix /var/pretix/venv/bin/pip install /pfad/zu/pretix-mailwizz
@@ -97,8 +97,8 @@ abgeleitetes Image. Eigenes `Dockerfile` anlegen:
 ```dockerfile
 FROM pretix/standalone:stable
 USER root
-COPY pretix_mailwizz-1.0.0-py3-none-any.whl /tmp/
-RUN pip3 install /tmp/pretix_mailwizz-1.0.0-py3-none-any.whl
+COPY pretix_mailwizz-1.1.0-py3-none-any.whl /tmp/
+RUN pip3 install /tmp/pretix_mailwizz-1.1.0-py3-none-any.whl
 #   oder aus lokalem Quellcode:
 #   COPY pretix-mailwizz /pretix-mailwizz
 #   RUN pip3 install /pretix-mailwizz
@@ -179,8 +179,16 @@ Einstellungen gibt es auf zwei Ebenen:
 
 Mit **„Verbindung testen"** auf der Event-Einstellungsseite werden URL,
 Schlüssel und Listen-UID gegen die MailWizz-API geprüft. Darunter zeigt
-die Seite die letzten Sync-Einträge inkl. Fehlern (E-Mail-Adressen
-maskiert).
+die Seite die letzten Sync-Einträge inkl. Status, Anzahl Versuche und
+**Fehlergrund** (E-Mail-Adressen maskiert).
+
+**Fehlgeschlagene Syncs erneut versuchen:** Temporäre Fehler (Netzwerk,
+Timeout, 5xx) werden automatisch mit exponentiellem Backoff wiederholt.
+Endgültig auf `failed` stehende Einträge können manuell erneut angestoßen
+werden – pro Zeile über **„Erneut versuchen"** oder gesammelt über
+**„Alle fehlgeschlagenen erneut versuchen"**. Der Eintrag wird dabei auf
+`pending` zurückgesetzt und der Sync-Task neu eingereiht; bereits
+erfolgreiche oder übersprungene Einträge werden nie erneut gesendet.
 
 Vorname/Nachname werden – falls vorhanden – aus der Rechnungsadresse der
 Bestellung übernommen und nur übertragen, wenn ein Feld-Tag konfiguriert
@@ -276,11 +284,11 @@ und es sind keine echten Zugangsdaten enthalten.
 ```bash
 cd pretix-mailwizz
 pip install build pretix-plugin-build
-python -m build          # erzeugt dist/pretix_mailwizz-1.0.0-py3-none-any.whl
+python -m build          # erzeugt dist/pretix_mailwizz-1.1.0-py3-none-any.whl
 ```
 
 Das Wheel kann dann auf dem Zielserver direkt installiert werden:
-`pip install pretix_mailwizz-1.0.0-py3-none-any.whl`
+`pip install pretix_mailwizz-1.1.0-py3-none-any.whl`
 
 ## Lizenz
 

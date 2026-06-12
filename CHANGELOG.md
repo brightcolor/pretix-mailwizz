@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.0 (2026-06-12)
+
+* Manual retry for failed syncs: the event settings page now shows a
+  "Retry" button per failed entry and a "Retry all failed" button. Failed
+  entries are reset to pending and re-queued; successful or skipped
+  entries are never touched (`event.retry` view).
+* Migration `0001` now pins to a stable long-standing pretixbase
+  migration (instead of a release-specific latest one) so a fresh install
+  applies cleanly across supported pretix versions.
+* The MailWizz menu item under event settings is only shown to users with
+  the `can_change_event_settings` permission.
+
 ## 1.0.0 (2026-06-11)
 
 * Initial release.

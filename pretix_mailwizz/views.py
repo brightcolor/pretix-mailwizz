@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -15,6 +17,8 @@ from .config import K_LIST_UID, is_configured, mask_email
 from .forms import MailWizzSettingsForm
 from .mailwizz import MailWizzClient
 from .models import NewsletterSyncLog
+
+logger = logging.getLogger(__name__)
 
 
 class OrganizerSettingsView(
@@ -72,6 +76,7 @@ class EventSettingsView(
         # address is visible on the order anyway.
         ctx["sync_logs"] = [
             {
+                "pk": entry.pk,
                 "order_code": entry.order_code,
                 "email_masked": mask_email(entry.email),
                 "status": entry.get_status_display(),
@@ -82,6 +87,9 @@ class EventSettingsView(
             }
             for entry in logs
         ]
+        ctx["has_failed_syncs"] = NewsletterSyncLog.objects.filter(
+            event=self.request.event, status=NewsletterSyncLog.STATUS_FAILED
+        ).exists()
         return ctx
 
     def form_valid(self, form):
@@ -127,3 +135,63 @@ class TestConnectionView(EventPermissionRequiredMixin, View):
                 request, _("Connection failed: %(detail)s") % {"detail": detail}
             )
         return redirect(url)
+
+
+class RetrySyncView(EventPermissionRequiredMixin, View):
+    """
+    POST-only: re-queue failed newsletter syncs for another attempt.
+
+    With ``pk`` in POST data a single entry is retried; otherwise every
+    failed entry of the event is re-queued. Entries are reset to
+    ``pending`` and the sync task is enqueued again – successful or
+    skipped entries are never touched.
+    """
+
+    permission = "can_change_event_settings"
+
+    def post(self, request, *args, **kwargs):
+        from .tasks import mailwizz_sync_task
+
+        event = request.event
+        settings_url = reverse(
+            "plugins:pretix_mailwizz:event.settings",
+            kwargs={"organizer": request.organizer.slug, "event": event.slug},
+        )
+
+        qs = NewsletterSyncLog.objects.filter(
+            event=event, status=NewsletterSyncLog.STATUS_FAILED
+        )
+        pk = request.POST.get("pk")
+        if pk:
+            qs = qs.filter(pk=pk)
+
+        entries = list(qs)
+        if not entries:
+            messages.info(request, _("There are no failed syncs to retry."))
+            return redirect(settings_url)
+
+        requeued = 0
+        for log in entries:
+            log.status = NewsletterSyncLog.STATUS_PENDING
+            log.error_message = ""
+            log.save(update_fields=["status", "error_message", "updated"])
+            try:
+                mailwizz_sync_task.apply_async(args=[log.pk])
+                requeued += 1
+            except Exception:
+                logger.exception(
+                    "pretix_mailwizz: could not enqueue retry for order %s",
+                    log.order_code,
+                )
+
+        event.log_action(
+            "pretix_mailwizz.sync.retried",
+            user=request.user,
+            data={"count": requeued},
+        )
+        messages.success(
+            request,
+            _("Re-queued %(count)d failed sync(s) for another attempt.")
+            % {"count": requeued},
+        )
+        return redirect(settings_url)

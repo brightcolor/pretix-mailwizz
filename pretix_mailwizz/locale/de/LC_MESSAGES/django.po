@@ -171,6 +171,21 @@ msgstr "Hinweis"
 msgid "No newsletter syncs yet."
 msgstr "Noch keine Newsletter-Synchronisierungen."
 
+msgid "Retry"
+msgstr "Erneut versuchen"
+
+msgid "Retry this sync"
+msgstr "Diese Synchronisierung erneut versuchen"
+
+msgid "Retry all failed"
+msgstr "Alle fehlgeschlagenen erneut versuchen"
+
+msgid "There are no failed syncs to retry."
+msgstr "Es gibt keine fehlgeschlagenen Synchronisierungen zum Wiederholen."
+
+msgid "Re-queued %(count)d failed sync(s) for another attempt."
+msgstr "%(count)d fehlgeschlagene Synchronisierung(en) für einen erneuten Versuch eingereiht."
+
 msgid ""
 "Adds an optional newsletter opt-in checkbox to the checkout. If the "
 "customer actively consents, the email address is subscribed to the "

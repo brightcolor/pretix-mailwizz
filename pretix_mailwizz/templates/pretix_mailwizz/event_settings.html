@@ -85,7 +85,17 @@
 </form>
 
 <div class="panel panel-default">
-  <div class="panel-heading"><h3 class="panel-title">{% trans "Recent newsletter syncs" %}</h3></div>
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title pull-left" style="padding-top: 6px;">{% trans "Recent newsletter syncs" %}</h3>
+    {% if has_failed_syncs %}
+    <form action="{% url "plugins:pretix_mailwizz:event.retry" organizer=request.organizer.slug event=request.event.slug %}" method="post" class="pull-right" style="margin: 0;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm btn-default">
+        <span class="fa fa-refresh"></span> {% trans "Retry all failed" %}
+      </button>
+    </form>
+    {% endif %}
+  </div>
   <div class="panel-body">
     {% if sync_logs %}
     <table class="table table-condensed">
@@ -97,6 +107,7 @@
           <th>{% trans "Attempts" %}</th>
           <th>{% trans "Last attempt" %}</th>
           <th>{% trans "Note" %}</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -113,6 +124,17 @@
           <td>{{ entry.attempts }}</td>
           <td>{{ entry.last_attempt|default:"–" }}</td>
           <td>{{ entry.error_message }}</td>
+          <td class="text-right">
+            {% if entry.status_raw == "failed" %}
+            <form action="{% url "plugins:pretix_mailwizz:event.retry" organizer=request.organizer.slug event=request.event.slug %}" method="post" style="margin: 0;">
+              {% csrf_token %}
+              <input type="hidden" name="pk" value="{{ entry.pk }}">
+              <button type="submit" class="btn btn-xs btn-default" title="{% trans "Retry this sync" %}">
+                <span class="fa fa-refresh"></span> {% trans "Retry" %}
+              </button>
+            </form>
+            {% endif %}
+          </td>
         </tr>
         {% endfor %}
       </tbody>
